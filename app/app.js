@@ -7,7 +7,7 @@ angular.module('flutrack', [
     ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl: '/views/landingPage.html',
+            templateUrl: '/Views/landingPage.html',
             controller: 'mapCtrl'
         });
         $routeProvider.otherwise({redirectTo: '/'});
