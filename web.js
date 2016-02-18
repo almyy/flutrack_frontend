@@ -5,7 +5,7 @@ var express = require('express');
 var request = require('request');
 var app = express();
 
-app.use('/', express.static('app'));
+app.use('/', express.static(__dirname + '/app'));
 app.get('/api', function(req, res) {
     var flutrackUrl = 'http://api.flutrack.org/results.json';
     request(flutrackUrl).pipe(res);
