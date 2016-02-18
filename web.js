@@ -11,6 +11,6 @@ app.get('/api', function(req, res) {
     request(flutrackUrl).pipe(res);
 });
 app.listen(process.env.PORT || 5000, function(){
-    console.log("Server started. Running on port 5000")
+    console.log("Server started. Running on port " + process.env.PORT);
 });
 
