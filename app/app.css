@@ -20,9 +20,7 @@
 }
 
 .text-block {
-  margin-top: 50px;
-  margin-left: 500px;
-  margin-right: 500px;
+  margin: 50px 500px 100px 500px;
   font-family: 'Open Sans', sans-serif;
   text-align: left;
   font-size: 18px;

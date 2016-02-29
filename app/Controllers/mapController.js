@@ -9,6 +9,9 @@ angular.module('flutrack.controllers', ['flutrack.services'])
             }
             console.log(data.length);
             var mapOptions = {
+                streetViewControl: false,
+                scrollwheel: false,
+                mapTypeControl: false,
                 zoom: 4,
                 center: new google.maps.LatLng(40, -98),
                 mapTypeId: google.maps.MapTypeId.SATELLITE
