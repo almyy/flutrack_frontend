@@ -9,17 +9,21 @@
 </div>
 <div class="text-block">
     <p>The service will have a back-end currently in development, which will organize Twitter data, as well as doing
-        necessary calculations for predicting global spread.</p>
+        necessary calculations for predicting global spread. The backend is currently implemented as a set of algorithms
+        which will calculate a set of state equations for each given city in the transportation matrix. The system
+        utilizes up to date air travel data to calculate spread between cities. Below follows a short description of
+        what has been done on the backend and what the results of this implementation are. All numbers in parenthesees
+        are referring to equations in the paper "A mathematical model for the global spread of influenza" by Rvachev &
+        Longini. </p>
 
     <p>Algorithm 1 sets up the distributions (5), (6), given the distributions (2)-(4).
         These are probability distributions which describe the probability that a certain individual becomes infected
-        when
-        interacting with another individual.
-        The distributions were taken from Rvachev and Longini’s report. </p>
+        when interacting with another individual. The distributions were taken from Rvachev and Longini’s report. </p>
 
     <p>Algorithm 5 Applies the Transport Operator to a given function. Equation (8)
         Currently, this is implemented with an up to date travel matrix. To confirm the results of Rvachev & Longini, we
         have to copy their transportation matrix, and observe that our results correlate.</p>
+
     <p> Algorithm 6 Calculates the state equations for each of the disjoint population states. Equation (9) - (13)
         We’re confirming that the states are indeed disjoint by adding the states and checking that it adds up to the
         city’s
@@ -35,10 +39,7 @@
         Below follows a diagram of Hong Kong’s population with the initial parameters taken from the 1985 report. The
         diagram shows the portion of the population which is in the latent and infectious periods for each day during a
         100 day span. The total population for Hong Kong at the time is 3 900 000.</p>
-
     <img src="images/HongKong-all-states.png" alt="Graph">
-
-
     <p>
         The diagram below shows how the amount of the population that is susceptible to the influenza virus decreases as
         the
