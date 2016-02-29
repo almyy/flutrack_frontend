@@ -1,37 +1,29 @@
 /* app css stylesheet */
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+#map {
+  color: #3d3d3d;
+  min-width: 720px;
+  height: 670px;
+  z-index: 1000;
+  border-bottom: solid 6px #e0e0e0;
+  /*
+  -moz-box-shadow:    0px 15px 33px #383838;
+  -webkit-box-shadow: 0px 15px 33px #383838;
+  box-shadow:         0px 15px 33px #383838;
+  */
 }
 
-.menu:before {
-  content: "[";
+@media (min-width: 768px) {
+  #map {
+    height: 550px;
+  }
 }
 
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
-.map {
-  width: 800px;
-  height: 800px;
-  margin: auto;
-  margin-top: 20px;
+.text-block {
+  margin-top: 50px;
+  margin-left: 500px;
+  margin-right: 500px;
+  font-family: 'Open Sans', sans-serif;
+  text-align: left;
+  font-size: 18px;
 }
