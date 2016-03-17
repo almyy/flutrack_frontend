@@ -10,5 +10,10 @@ angular.module('flutrack', [
             templateUrl: '/Views/landingPage.html',
             controller: 'mapCtrl'
         });
+        $routeProvider.when('/spread', {
+            templateUrl: '/Views/influenzaSpread.html',
+            controller: 'spreadCtrl'
+        });
+
         $routeProvider.otherwise({redirectTo: '/'});
     }]);

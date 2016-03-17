@@ -33,6 +33,7 @@ angular.module('flutrack.controllers', ['flutrack.services'])
                 'rgba(255, 0, 0, 1)'
             ];
 
+
             var map = new google.maps.Map(document.getElementById('map'), mapOptions);
             var heatMap = new google.maps.visualization.HeatmapLayer({
                 data: data,

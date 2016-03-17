@@ -7,7 +7,7 @@ angular.module('flutrack.services', [])
 
         return {
             get: function (url, query) {
-                return $http.get(url + query);
+                return $http.get(url + '?' + query);
             }
         }
     }]);

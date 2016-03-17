@@ -10,7 +10,11 @@ app.get('/api', function(req, res) {
     var flutrackUrl = 'http://api.flutrack.org/results.json';
     request(flutrackUrl).pipe(res);
 });
+app.get('/api/prediction', function(req, res) {
+    var flutrackUrl = 'http://127.0.0.1:8000/prediction?index=' + req.query.index + '&day=' + req.query.day;
+    request(flutrackUrl).pipe(res);
+});
 app.listen(process.env.PORT || 5000, function(){
-    console.log("Server started. Running on port " + process.env.PORT);
+    console.log("Server started. Running on port " + (process.env.PORT ? process.env.PORT : 5000));
 });
 
