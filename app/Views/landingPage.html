@@ -1,5 +1,8 @@
 <div id='map' class="map"></div>
-
+<div class="slider-container">
+    <div ng-show="sliderReady" class="slider-text">Amount of days ahead to predict (0-440): </div>
+    <rzslider ng-show="sliderReady" rz-slider-model="vm.daySlider.value" rz-slider-options="vm.daySlider.options" class="slider"></rzslider>
+</div>
 <div class="text-block">
     <p>This service is a part of a master's thesis at NTNU, made by Mikael Rino Solstad and Martin Almvik. The goal is
         to create a service which is able to predict the global spread of influenza through air traffic with the use of
@@ -39,7 +42,7 @@
         Below follows a diagram of Hong Kong’s population with the initial parameters taken from the 1985 report. The
         diagram shows the portion of the population which is in the latent and infectious periods for each day during a
         100 day span. The total population for Hong Kong at the time is 3 900 000.</p>
-    <img src="images/HongKong-all-states.png" alt="Graph">
+    <img class="graph" src="images/HongKong-all-states.png" alt="Graph">
     <p>
         The diagram below shows how the amount of the population that is susceptible to the influenza virus decreases as
         the
@@ -47,12 +50,12 @@
         because the fraction of susceptible population is calculated to be 0.641 (Taken from Rvachev & Longini). 3 900
         000 *
         0.641 = 2 499 900</p>
-    <img src="images/HongKong-latent-infectious.png" alt="Graph">
+    <img class="graph" src="images/HongKong-latent-infectious.png" alt="Graph">
     <p>
         The diagram clearly shows as people move from susceptible to infected, the total number of individuals
         (susceptible
         + Sum of latent) stays constant at 2 500 000.
-        <img src="images/HongKong-Susceptible-recovered.png" alt="Graph">
+        <img class="graph" src="images/HongKong-Susceptible-recovered.png" alt="Graph">
     <p>
         The diagram shows the graphs for recovered individuals and susceptible individuals as the disease progresses.
         This
@@ -64,5 +67,5 @@
         all of the states, which remains constant at 3 900 000 throughout the span of 100 days. This gives us an
         assurance that   the model is implemented correctly thus far.
     </p>
-    <img src="images/HongKong-susceptible-sumoflatent.png" alt="Graph">
+    <img class="graph" src="images/HongKong-susceptible-sumoflatent.png" alt="Graph">
 </div>

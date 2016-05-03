@@ -9,11 +9,11 @@ angular.module('flutrack', [
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', {
                 templateUrl: '/Views/landingPage.html',
-                controller: 'mapCtrl'
+                controller: 'spreadCtrl as vm'
             })
             .when('/spread', {
                 templateUrl: '/Views/influenzaSpread.html',
-                controller: 'spreadCtrl'
+                controller: 'mapCtrl'
             })
             .otherwise({redirectTo: '/'});
     }]);
