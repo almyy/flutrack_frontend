@@ -110,6 +110,7 @@ angular.module('flutrack.controllers', ['flutrack.services'])
             }
             vm.updateHeatMap = function() {
                 var mapData = {
+                    max: 100,
                     data: days[vm.daySlider.value]
                 };
                 heatmap.setData(mapData);
