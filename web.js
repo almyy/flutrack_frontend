@@ -11,7 +11,7 @@ app.get('/api', function(req, res) {
     request(flutrackUrl).pipe(res);
 });
 app.get('/api/prediction', function(req, res) {
-    var flutrackUrl = 'http://flutrack-backend.herokuapp.com/prediction";
+    var flutrackUrl = 'http://flutrack-backend.herokuapp.com/prediction';
     request(flutrackUrl).pipe(res);
 });
 app.get('/test/prediction', function(req, res) {
