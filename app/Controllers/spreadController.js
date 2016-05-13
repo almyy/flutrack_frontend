@@ -122,13 +122,11 @@ angular.module('flutrack.controllers', ['flutrack.services'])
                 }
                 days.push(data);
             }
-            //console.log(days);
             vm.updateHeatMap = function() {
                 var mapData = {
                     max: 100,
                     data: vm.daySlider.value <= 0 ? historyData[Math.abs(vm.daySlider.value)] : days[vm.daySlider.value]
                 };
-                console.log(mapData);
                 heatmap.setData(mapData);
             };
             vm.daySlider = {
