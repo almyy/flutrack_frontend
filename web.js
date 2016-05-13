@@ -10,6 +10,10 @@ app.get('/api', function(req, res) {
     var flutrackUrl = 'http://api.flutrack.org/results.json';
     request(flutrackUrl).pipe(res);
 });
+app.get('/api/tweets', function(req, res) {
+    var flutrackUrl = 'http://flutrack-backend.herokuapp.com/tweets';
+    request(flutrackUrl).pipe(res);
+});
 app.get('/api/prediction', function(req, res) {
     var flutrackUrl = 'http://flutrack-backend.herokuapp.com/prediction';
     request(flutrackUrl).pipe(res);
