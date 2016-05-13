@@ -18,6 +18,10 @@ app.get('/test/prediction', function(req, res) {
     var flutrackUrl = 'http://127.0.0.1:8000/prediction';
     request(flutrackUrl).pipe(res);
 });
+app.get('/test/tweets', function(req, res) {
+    var flutrackUrl = 'http://127.0.0.1:8000/tweets';
+    request(flutrackUrl).pipe(res);
+});
 app.listen(process.env.PORT || 5000, function(){
     console.log("Server started. Running on port " + (process.env.PORT ? process.env.PORT : 5000));
 });

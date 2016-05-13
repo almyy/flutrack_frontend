@@ -1,7 +1,7 @@
 <div id='map' class="map"></div>
-<div class="slider-container">
-    <div ng-show="sliderReady" class="slider-text">Amount of days ahead to predict (0-440): </div>
-    <rzslider ng-show="sliderReady" rz-slider-model="vm.daySlider.value" rz-slider-options="vm.daySlider.options" class="slider"></rzslider>
+<div class="slider-container" ng-show="sliderReady">
+    <div class="slider-text">Amount of days ahead to predict (0-440): </div>
+    <rzslider rz-slider-model="vm.daySlider.value" rz-slider-options="vm.daySlider.options" class="slider"></rzslider>
 </div>
 <div class="text-block">
     <p>This service is a part of a master's thesis at NTNU, made by Mikael Rino Solstad and Martin Almvik. The goal is

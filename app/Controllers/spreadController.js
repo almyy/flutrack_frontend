@@ -94,6 +94,23 @@ angular.module('flutrack.controllers', ['flutrack.services'])
         var days = [];
 
         HttpService.get('/api/prediction', '').then(function (res) {
+            var historyData=[];
+            HttpService.get('/api/tweets', '').then(function (res) {
+                for(var i = 0; i < res.data.length; i++) {
+                    var weekData = [];
+                    for(var j = 0; j < res.data[i].length; j++) {
+                        weekData.push({
+                            lat: res.data[i][j].location.lat,
+                            lng: res.data[i][j].location.lng,
+                            count: res.data[i][j].tweets
+                        })
+                    }
+                    historyData.push(weekData);
+                }
+                //console.log(historyData);
+            }, function(err) {
+                console.log("Got an error from the API: " + err.message);
+            });
             for (var i = 0; i < res.data.length; i++) {
                 var data = [];
                 for (var j = 0; j < res.data[i].length; j++) {
@@ -102,22 +119,22 @@ angular.module('flutrack.controllers', ['flutrack.services'])
                         lng: res.data[i][j].location.lng,
                         count: res.data[i][j].morbidity
                     });
-                    if (res.data[i][j].morbidity > 100) {
-                        console.log(res.data[i][j].morbidity)
-                    }
                 }
                 days.push(data);
             }
+            //console.log(days);
             vm.updateHeatMap = function() {
                 var mapData = {
-                    data: days[vm.daySlider.value]
+                    max: 100,
+                    data: vm.daySlider.value <= 0 ? historyData[Math.abs(vm.daySlider.value)] : days[vm.daySlider.value]
                 };
+                console.log(mapData);
                 heatmap.setData(mapData);
             };
             vm.daySlider = {
                 value: 0,
                 options: {
-                    floor: 0,
+                    floor: -7,
                     ceil: 439,
                     onChange:vm.updateHeatMap
                 }
