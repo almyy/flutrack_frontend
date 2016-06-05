@@ -11,9 +11,5 @@ angular.module('flutrack', [
                 templateUrl: '/Views/landingPage.html',
                 controller: 'spreadCtrl as vm'
             })
-            .when('/spread', {
-                templateUrl: '/Views/influenzaSpread.html',
-                controller: 'mapCtrl'
-            })
             .otherwise({redirectTo: '/'});
     }]);

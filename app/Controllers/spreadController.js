@@ -3,6 +3,7 @@
 angular.module('flutrack.controllers', ['flutrack.services'])
     .controller('spreadCtrl', function ($scope, $timeout, HttpService) {
         var vm = this;
+        vm.sliderReady = false;
         var map;
         var mapOptions = {
             streetViewControl: false,
@@ -54,7 +55,7 @@ angular.module('flutrack.controllers', ['flutrack.services'])
         var styledMapType = new google.maps.StyledMapType(style, {map: map, name: 'Styled Map'});
         map.mapTypes.set('map-style', styledMapType);
         map.setMapTypeId('map-style');
-        var heatmap = new HeatmapOverlay(map,
+        var predictionHeatmap = new HeatmapOverlay(map,
             {
                 // radius should be small ONLY if scaleRadius is true (or small radius is intended)
                 "radius": 2,
@@ -86,154 +87,74 @@ angular.module('flutrack.controllers', ['flutrack.services'])
                     '0.84': 'rgba(127, 0, 63, 1)',
                     '0.91': 'rgba(191, 0, 31, 1)',
                     '1': 'rgba(255, 0, 0, 1)'
-
                 }
             }
         );
-
         var days = [];
+        var tweets = [];
 
-        HttpService.get('/api/prediction', '').then(function (res) {
-            var historyData=[];
-            HttpService.get('/api/tweets', '').then(function (res) {
-                for(var i = 0; i < res.data.length; i++) {
-                    var weekData = [];
-                    for(var j = 0; j < res.data[i].length; j++) {
-                        weekData.push({
-                            lat: res.data[i][j].location.lat,
-                            lng: res.data[i][j].location.lng,
-                            count: res.data[i][j].tweets
+        HttpService.get('/api/prediction').then(function (res) {
+            console.log(res);
+            vm.isEpidemic = !res.data.is_dummy;
+            HttpService.get('/api/tweets').then(function (res) {
+                vm.trends = res.data;
+                for(var i = 0; i < vm.trends[0].weeks.length; i++) {
+                    var week = [];
+                    for(var j = 0; j < vm.trends.length; j++) {
+                        week.push({
+                            lat: vm.trends[j].location.lat,
+                            lng: vm.trends[j].location.lng,
+                            count: vm.trends[j].weeks[i]
                         })
                     }
-                    historyData.push(weekData);
+                    tweets.push(week);
                 }
-                //console.log(historyData);
             }, function(err) {
                 console.log("Got an error from the API: " + err.message);
             });
-            for (var i = 0; i < res.data.length; i++) {
+            for (var i = 0; i < res.data.forecast.length; i++) {
                 var data = [];
-                for (var j = 0; j < res.data[i].length; j++) {
+                for (var j = 0; j < res.data.forecast[i].length; j++) {
                     data.push({
-                        lat: res.data[i][j].location.lat,
-                        lng: res.data[i][j].location.lng,
-                        count: res.data[i][j].morbidity
+                        lat: res.data.forecast[i][j].location.lat,
+                        lng: res.data.forecast[i][j].location.lng,
+                        count: res.data.forecast[i][j].morbidity
                     });
                 }
                 days.push(data);
             }
+
             vm.updateHeatMap = function() {
-                var mapData = {
+                var predictionData = {
                     max: 100,
-                    data: vm.daySlider.value <= 0 ? historyData[Math.abs(vm.daySlider.value)] : days[vm.daySlider.value]
+                    data: days[vm.predictionSlider.value]
                 };
-                heatmap.setData(mapData);
+                console.log(predictionData);
+                predictionHeatmap.setData(predictionData);
             };
-            vm.daySlider = {
+            vm.predictionSlider = {
                 value: 0,
                 options: {
-                    floor: -7,
+                    floor: 0,
                     ceil: 439,
                     onChange:vm.updateHeatMap
                 }
             };
-            $scope.sliderReady = true;
+            vm.sliderReady = true;
             $scope.$broadcast('rzSliderForceRender');
-            //for(var u = 0; u < 439; u++) {
-            //    $timeout(function () {
-            //        $scope.daySlider++;
-            //        var mapData = {
-            //            max: 100,
-            //            data: days[$scope.daySlider]
-            //        };
-            //        heatmap.setData(mapData);
-            //    }, 1000);
-            //}
+
         }, function (error) {
             console.log('Got an error from the API:' + error.message);
         });
-
-    })
-    .controller('mapCtrl', function ($scope, HttpService) {
-        var data = [];
-        HttpService.get('/api', '').then(function (res) {
-            for (var tweet in res.data) {
-                data.push(new google.maps.LatLng(res.data[tweet].latitude, res.data[tweet].longitude));
+        vm.bgColor = function(city) {
+            if(vm.trends[city].epidemic) {
+                return {'background-color': '#FF6149'}
             }
-            console.log(data.length);
-            var mapOptions = {
-                streetViewControl: false,
-                scrollwheel: false,
-                mapTypeControl: false,
-                zoom: 4,
-                center: new google.maps.LatLng(40, -98),
-                mapTypeId: google.maps.MapTypeId.SATELLITE
-            };
-            var gradient = [
-                'rgba(0, 255, 255, 0)',
-                'rgba(0, 255, 255, 1)',
-                'rgba(0, 191, 255, 1)',
-                'rgba(0, 127, 255, 1)',
-                'rgba(0, 63, 255, 1)',
-                'rgba(0, 0, 255, 1)',
-                'rgba(0, 0, 223, 1)',
-                'rgba(0, 0, 191, 1)',
-                'rgba(0, 0, 159, 1)',
-                'rgba(0, 0, 127, 1)',
-                'rgba(63, 0, 91, 1)',
-                'rgba(127, 0, 63, 1)',
-                'rgba(191, 0, 31, 1)',
-                'rgba(255, 0, 0, 1)'
-            ];
-
-
-            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            var heatMap = new google.maps.visualization.HeatmapLayer({
-                data: data,
-                map: map,
-                radius: 15,
-                gradient: gradient
-            });
-            var style = [
-                {
-                    featureType: 'all',
-                    elementType: 'all',
-                    stylers: [ // styling the map
-                        {saturation: -100},
-                        {lightness: 0},
-                        {gamma: 0.90}
-                    ]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'geometry.fill',
-                    stylers: [
-                        {color: '#383838'}
-                    ]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'labels.text',
-                    stylers: [
-                        {color: '#ffffff'}
-                    ]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'labels.text.fill',
-                    stylers: [
-                        {color: '#383838'}
-                    ]
-                }
-            ];
-
-            var styledMapType = new google.maps.StyledMapType(style, {map: map, name: 'Styled Map'});
-            map.mapTypes.set('map-style', styledMapType);
-            map.setMapTypeId('map-style');
-
-            heatMap.set('opacity', 1);
-            $scope.map = map;
-        }, function (error) {
-            console.log(error);
-        });
+            else if(vm.trends[city].increasing) {
+                return {'background-color': 'rgb(255,240,124)'}
+            }
+            else {
+                return {'background-color': 'none'}
+            }
+        }
     });

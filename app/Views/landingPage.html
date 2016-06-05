@@ -1,71 +1,36 @@
 <div id='map' class="map"></div>
-<div class="slider-container" ng-show="sliderReady">
-    <div class="slider-text">Amount of days ahead to predict (0-440): </div>
-    <rzslider rz-slider-model="vm.daySlider.value" rz-slider-options="vm.daySlider.options" class="slider"></rzslider>
+<div class="slider-container" data-ng-show="vm.sliderReady">
+    <div class="slider-text">Day (0-440):</div>
+    <rzslider rz-slider-model="vm.predictionSlider.value" rz-slider-options="vm.predictionSlider.options" class="slider"></rzslider>
+</div>
+<div class="text-block" data-ng-show="!vm.isEpidemic">
+    <p>Right now, there are no cities with an epidemic, but here's an example of how the spread would have looked if there were an epidemic in Honolulu!</p>
 </div>
 <div class="text-block">
-    <p>This service is a part of a master's thesis at NTNU, made by Mikael Rino Solstad and Martin Almvik. The goal is
-        to create a service which is able to predict the global spread of influenza through air traffic with the use of
-        twitter for detecting outbreaks.
-        The map above shows a basic representation of the flu occurrences collected through api.flutrack.org. A darker
-        shade of blue means more flu occurrences in that area.</p>
+    <p>This web page is part of the results from a Master's thesis written by Martin Almvik and Mikael Rino Solstad at
+        NTNU. The system scans tweets, and calculates and visualizes the spread of a potential influenza pandemic from a
+        certain city, given that a city has experienced an influenza epidemic. The slider above chooses which day to
+        visualize on the map.
+    </p>
+    <p>
+        The table below contains all the city represented in the system, and shows how many influenza related tweets
+        have been found from each of them. If a city has an increasing trend, it's highlighted in yellow, while it's
+        highlighted in red if our system has detected an influenza epidemic in that city.
+    </p>
 </div>
-<div class="text-block">
-    <p>The service will have a back-end currently in development, which will organize Twitter data, as well as doing
-        necessary calculations for predicting global spread. The backend is currently implemented as a set of algorithms
-        which will calculate a set of state equations for each given city in the transportation matrix. The system
-        utilizes up to date air travel data to calculate spread between cities. Below follows a short description of
-        what has been done on the backend and what the results of this implementation are. All numbers in parenthesees
-        are referring to equations in the paper "A mathematical model for the global spread of influenza" by Rvachev &
-        Longini. </p>
-
-    <p>Algorithm 1 sets up the distributions (5), (6), given the distributions (2)-(4).
-        These are probability distributions which describe the probability that a certain individual becomes infected
-        when interacting with another individual. The distributions were taken from Rvachev and Longini’s report. </p>
-
-    <p>Algorithm 5 Applies the Transport Operator to a given function. Equation (8)
-        Currently, this is implemented with an up to date travel matrix. To confirm the results of Rvachev & Longini, we
-        have to copy their transportation matrix, and observe that our results correlate.</p>
-
-    <p> Algorithm 6 Calculates the state equations for each of the disjoint population states. Equation (9) - (13)
-        We’re confirming that the states are indeed disjoint by adding the states and checking that it adds up to the
-        city’s
-        population for every day t. Equation (1). </p>
-
-    <p>What remains to make the model complete, is that we need to implement functions for local spread, and from this
-        calculate the initial conditions of the flu. Right now we are just using the initial conditions given in the
-        report, to test our model.</p>
-
-    <p>Below follows some diagrams from the backend, which will show the population states for a given city over 100
-        days.</p>
-    <p>
-        Below follows a diagram of Hong Kong’s population with the initial parameters taken from the 1985 report. The
-        diagram shows the portion of the population which is in the latent and infectious periods for each day during a
-        100 day span. The total population for Hong Kong at the time is 3 900 000.</p>
-    <img class="graph" src="images/HongKong-all-states.png" alt="Graph">
-    <p>
-        The diagram below shows how the amount of the population that is susceptible to the influenza virus decreases as
-        the
-        population go through the disease. At day 0 the number of susceptible individuals are roughly 2 500 000. This is
-        because the fraction of susceptible population is calculated to be 0.641 (Taken from Rvachev & Longini). 3 900
-        000 *
-        0.641 = 2 499 900</p>
-    <img class="graph" src="images/HongKong-latent-infectious.png" alt="Graph">
-    <p>
-        The diagram clearly shows as people move from susceptible to infected, the total number of individuals
-        (susceptible
-        + Sum of latent) stays constant at 2 500 000.
-        <img class="graph" src="images/HongKong-Susceptible-recovered.png" alt="Graph">
-    <p>
-        The diagram shows the graphs for recovered individuals and susceptible individuals as the disease progresses.
-        This
-        amounts to the total population - the individuals which are in the incubation of infection phases of the
-        disease.
-    </p>
-    <p>
-        The last diagram show all of the four disjoint states at any given day t. Calculated population is the sum of
-        all of the states, which remains constant at 3 900 000 throughout the span of 100 days. This gives us an
-        assurance that   the model is implemented correctly thus far.
-    </p>
-    <img class="graph" src="images/HongKong-susceptible-sumoflatent.png" alt="Graph">
+<div class="table-container" data-ng-cloak>
+    <div class="table-row">
+        <div class="table-column"><b>Cities</b></div>
+        <div class="table-column" data-ng-repeat="week in vm.trends[0].weeks track by $index">
+            <b data-ng-if="$index==7">Current week</b>
+            <b data-ng-if="$index==6">1 week ago</b>
+            <b data-ng-if="$index<6">{{ 7 - $index }} weeks ago</b>
+        </div>
+    </div>
+    <div class="table-row" data-ng-style="vm.bgColor($index)" data-ng-repeat="city in vm.trends">
+        <div class="table-column">{{city.city}}</div>
+        <div class="table-column" data-ng-repeat="week in city.weeks track by $index">
+            {{week}}
+        </div>
+    </div>
 </div>

@@ -6,7 +6,7 @@ angular.module('flutrack.services', [])
     .factory('HttpService', ['$http', function($http) {
 
         return {
-            get: function (url, query) {
+            get: function (url) {
                 return $http.get(url);
             }
         }
