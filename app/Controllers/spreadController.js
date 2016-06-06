@@ -94,21 +94,9 @@ angular.module('flutrack.controllers', ['flutrack.services'])
         var tweets = [];
 
         HttpService.get('/api/prediction').then(function (res) {
-            console.log(res);
             vm.isEpidemic = !res.data.is_dummy;
             HttpService.get('/api/tweets').then(function (res) {
                 vm.trends = res.data;
-                for(var i = 0; i < vm.trends[0].weeks.length; i++) {
-                    var week = [];
-                    for(var j = 0; j < vm.trends.length; j++) {
-                        week.push({
-                            lat: vm.trends[j].location.lat,
-                            lng: vm.trends[j].location.lng,
-                            count: vm.trends[j].weeks[i]
-                        })
-                    }
-                    tweets.push(week);
-                }
             }, function(err) {
                 console.log("Got an error from the API: " + err.message);
             });
@@ -123,13 +111,11 @@ angular.module('flutrack.controllers', ['flutrack.services'])
                 }
                 days.push(data);
             }
-
             vm.updateHeatMap = function() {
                 var predictionData = {
                     max: 100,
                     data: days[vm.predictionSlider.value]
                 };
-                console.log(predictionData);
                 predictionHeatmap.setData(predictionData);
             };
             vm.predictionSlider = {
