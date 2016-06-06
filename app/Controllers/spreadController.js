@@ -93,9 +93,9 @@ angular.module('flutrack.controllers', ['flutrack.services'])
         var days = [];
         var tweets = [];
 
-        HttpService.get('/api/prediction').then(function (res) {
+        HttpService.get('/test/prediction').then(function (res) {
             vm.isEpidemic = !res.data.is_dummy;
-            HttpService.get('/api/tweets').then(function (res) {
+            HttpService.get('/test/tweets').then(function (res) {
                 vm.trends = res.data;
             }, function(err) {
                 console.log("Got an error from the API: " + err.message);
